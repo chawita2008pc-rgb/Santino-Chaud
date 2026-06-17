@@ -1,0 +1,8 @@
+{
+  "name": "Santino Chaud - Athlete & Motorsport",
+  "description": "Personal website for Santino Chaud, a 17-year-old aspiring athlete and car enthusiast.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
