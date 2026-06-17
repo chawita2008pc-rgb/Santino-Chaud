@@ -636,8 +636,14 @@ export default function App() {
     {/* ── WhatsApp floating button ── */}
     <motion.a
       href="https://wa.me/5491160022197"
-      target="_blank"
-      rel="noopener noreferrer"
+      onClick={(e: MouseEvent) => {
+        e.preventDefault();
+        const phone = '5491160022197';
+        window.location.href = `whatsapp://send?phone=${phone}`;
+        setTimeout(() => {
+          window.open(`https://wa.me/${phone}`, '_blank');
+        }, 1500);
+      }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 1.5, type: 'spring', stiffness: 300, damping: 20 }}
