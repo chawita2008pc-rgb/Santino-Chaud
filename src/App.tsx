@@ -126,6 +126,7 @@ function ImgCard({
 
 export default function App() {
   return (
+    <>
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-blue-600 overflow-x-hidden">
 
       {/* ── Navbar ── */}
@@ -578,24 +579,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── WhatsApp floating button ── */}
-      <motion.a
-        href="https://wa.me/5491160022197"
-        target="_blank"
-        rel="noopener noreferrer"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.5, type: 'spring', stiffness: 300, damping: 20 }}
-        whileHover={{ scale: 1.12 }}
-        whileTap={{ scale: 0.92 }}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.45)] hover:shadow-[0_4px_36px_rgba(37,211,102,0.65)] transition-shadow"
-        aria-label="Contactar por WhatsApp"
-      >
-        <svg viewBox="0 0 32 32" fill="white" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 2C8.268 2 2 8.268 2 16c0 2.478.67 4.8 1.836 6.795L2 30l7.404-1.812A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.6a11.56 11.56 0 01-5.893-1.61l-.422-.25-4.393 1.074 1.106-4.27-.276-.44A11.56 11.56 0 014.4 16C4.4 9.592 9.592 4.4 16 4.4S27.6 9.592 27.6 16 22.408 27.6 16 27.6zm6.34-8.67c-.348-.174-2.058-1.015-2.378-1.13-.32-.116-.553-.174-.786.174-.232.347-.9 1.13-1.103 1.362-.203.232-.406.26-.754.087-.348-.174-1.47-.542-2.8-1.726-1.034-.923-1.732-2.063-1.935-2.41-.203-.348-.022-.536.153-.71.157-.155.348-.406.522-.61.174-.202.232-.347.348-.579.116-.232.058-.435-.029-.61-.087-.173-.786-1.894-1.077-2.594-.283-.682-.57-.59-.786-.6l-.67-.012c-.232 0-.61.087-.928.435-.319.348-1.22 1.19-1.22 2.902s1.249 3.366 1.423 3.598c.174.232 2.457 3.75 5.955 5.262.833.36 1.482.574 1.988.734.835.265 1.595.228 2.196.138.67-.1 2.058-.841 2.348-1.655.29-.813.29-1.51.203-1.655-.086-.145-.319-.232-.667-.406z" />
-        </svg>
-      </motion.a>
-
       {/* ── Footer ── */}
       <motion.footer
         initial={{ opacity: 0, y: 40 }}
@@ -649,5 +632,24 @@ export default function App() {
       </motion.footer>
 
     </div>
+
+    {/* ── WhatsApp floating button ── */}
+    <motion.a
+      href="https://wa.me/5491160022197"
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 1.5, type: 'spring', stiffness: 300, damping: 20 }}
+      whileHover={{ scale: 1.12 }}
+      whileTap={{ scale: 0.92 }}
+      className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.45)] hover:shadow-[0_4px_36px_rgba(37,211,102,0.65)] transition-shadow"
+      aria-label="Contactar por WhatsApp"
+    >
+      <svg viewBox="0 0 32 32" fill="white" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2C8.268 2 2 8.268 2 16c0 2.478.67 4.8 1.836 6.795L2 30l7.404-1.812A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.6a11.56 11.56 0 01-5.893-1.61l-.422-.25-4.393 1.074 1.106-4.27-.276-.44A11.56 11.56 0 014.4 16C4.4 9.592 9.592 4.4 16 4.4S27.6 9.592 27.6 16 22.408 27.6 16 27.6zm6.34-8.67c-.348-.174-2.058-1.015-2.378-1.13-.32-.116-.553-.174-.786.174-.232.347-.9 1.13-1.103 1.362-.203.232-.406.26-.754.087-.348-.174-1.47-.542-2.8-1.726-1.034-.923-1.732-2.063-1.935-2.41-.203-.348-.022-.536.153-.71.157-.155.348-.406.522-.61.174-.202.232-.347.348-.579.116-.232.058-.435-.029-.61-.087-.173-.786-1.894-1.077-2.594-.283-.682-.57-.59-.786-.6l-.67-.012c-.232 0-.61.087-.928.435-.319.348-1.22 1.19-1.22 2.902s1.249 3.366 1.423 3.598c.174.232 2.457 3.75 5.955 5.262.833.36 1.482.574 1.988.734.835.265 1.595.228 2.196.138.67-.1 2.058-.841 2.348-1.655.29-.813.29-1.51.203-1.655-.086-.145-.319-.232-.667-.406z" />
+      </svg>
+    </motion.a>
+    </>
   );
 }
