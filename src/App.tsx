@@ -216,7 +216,7 @@ export default function App() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <ImgCard src="/simulador.jpeg" alt="Simulador" aspect="aspect-[4/5]" label="EN PISTA" sublabel="Karting real" />
+              <ImgCard src="/simulador.jpeg" alt="Simulador" aspect="aspect-[4/5]" label="Simracing" sublabel="Competicion Virtual" />
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -538,7 +538,15 @@ export default function App() {
 
               <motion.a
                 variants={fadeUp}
-                href="mailto:"
+                href="https://wa.me/5491160022197"
+                onClick={(e: MouseEvent) => {
+                  e.preventDefault();
+                  const phone = '5491160022197';
+                  window.location.href = `whatsapp://send?phone=${phone}`;
+                  setTimeout(() => {
+                    window.open(`https://wa.me/${phone}`, '_blank');
+                  }, 1500);
+                }}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 className="group relative inline-flex items-center gap-4 px-10 py-5 bg-white text-black font-display font-black uppercase tracking-widest text-base rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 overflow-hidden"
