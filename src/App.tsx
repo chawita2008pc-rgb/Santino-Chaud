@@ -157,7 +157,7 @@ export default function App() {
       <div id="hero" className="w-full">
         <ScrollExpandMedia
           mediaType="video"
-          mediaSrc="/karting-hero.mov"
+          mediaSrc="/karting-hero.mp4"
           posterSrc="/karting-bg.jpeg"
           bgImageSrc="/karting-bg.jpeg"
           title="SANTINO CHAUD"
