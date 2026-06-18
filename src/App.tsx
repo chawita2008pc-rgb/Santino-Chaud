@@ -580,7 +580,7 @@ export default function App() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <ImgCard src="/categoria-top.png" alt="Categoría top" aspect="aspect-video" label="PRÓXIMO NIVEL" sublabel="El futuro es ahora" />
+              <ImgCard src="/categoria-top.jpg" alt="Categoría top" aspect="aspect-video" label="PRÓXIMO NIVEL" sublabel="El futuro es ahora" />
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 whileInView={{ opacity: 1, scale: 1 }}
