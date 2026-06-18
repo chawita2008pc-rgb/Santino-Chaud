@@ -52,7 +52,7 @@ const ScrollExpandMedia = ({
     if (mediaContainerRef.current) {
       if (isMobile) {
         mediaContainerRef.current.style.width = `${80 + progress * 15}vw`;
-        mediaContainerRef.current.style.height = `${52 + progress * 36}vh`;
+        mediaContainerRef.current.style.height = `${40 + progress * 36}vh`;
       } else {
         mediaContainerRef.current.style.width = `${300 + progress * 1250}px`;
         mediaContainerRef.current.style.height = `${400 + progress * 400}px`;
@@ -176,7 +176,7 @@ const ScrollExpandMedia = ({
                 className='absolute z-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl'
                 style={{
                   width: isMobileState ? '80vw' : '300px',
-                  height: isMobileState ? '52vh' : '400px',
+                  height: isMobileState ? '40vh' : '400px',
                   maxWidth: '95vw',
                   maxHeight: '88vh',
                   boxShadow: '0px 0px 50px rgba(0,0,0,0.5)',
@@ -210,7 +210,7 @@ const ScrollExpandMedia = ({
                         playsInline
                         preload='auto'
                         className='w-full h-full object-cover rounded-xl'
-                        style={{ objectPosition: 'center 20%' }}
+                        style={{ objectPosition: isMobileState ? 'center center' : 'center 20%' }}
                         disablePictureInPicture
                         disableRemotePlayback
                       />
