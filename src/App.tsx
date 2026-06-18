@@ -80,13 +80,7 @@ function CountUp({ to, suffix = '', decimals = 0 }: { to: number; suffix?: strin
 
 /* ─── floating blob ─── */
 function Blob({ className }: { className: string }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      animate={{ y: [0, -24, 0], scale: [1, 1.05, 1] }}
-      transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-    />
-  );
+  return <div className={`absolute rounded-full pointer-events-none hidden md:block ${className}`} />;
 }
 
 /* ─── section badge ─── */
@@ -164,6 +158,7 @@ export default function App() {
         <ScrollExpandMedia
           mediaType="video"
           mediaSrc="/karting-hero.mov"
+          posterSrc="/karting-bg.jpeg"
           bgImageSrc="/karting-bg.jpeg"
           title="SANTINO CHAUD"
           date="BUENOS AIRES • ARGENTINA"
@@ -458,8 +453,6 @@ export default function App() {
               <motion.div
                 variants={scaleIn}
                 whileHover={{ scale: 1.03, boxShadow: '0 0 50px rgba(59,130,246,0.2)' }}
-                animate={{ boxShadow: ['0 0 0px rgba(59,130,246,0)', '0 0 30px rgba(59,130,246,0.12)', '0 0 0px rgba(59,130,246,0)'] }}
-                transition={{ boxShadow: { duration: 3, repeat: Infinity, ease: 'easeInOut' } }}
                 className="p-6 border border-blue-500/25 rounded-2xl bg-blue-500/5 cursor-default"
               >
                 <p className="font-mono text-blue-400 text-xs tracking-widest mb-3">DIFERENCIA AL PROFESIONAL</p>
@@ -539,13 +532,9 @@ export default function App() {
                     whileHover={{ x: 6, borderColor: 'rgba(96,165,250,0.5)' }}
                     className="group flex items-center gap-4 p-4 rounded-2xl border border-blue-500/20 bg-gradient-to-r from-blue-500/10 to-transparent hover:from-blue-500/20 transition-all duration-300 cursor-default"
                   >
-                    <motion.div
-                      animate={{ scale: [1, 1.4, 1] }}
-                      transition={{ duration: 2, delay: i * 0.3, repeat: Infinity, repeatDelay: 3 }}
-                      className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-400/40 flex items-center justify-center shrink-0 group-hover:bg-blue-500/30 group-hover:border-blue-400/70 transition-all"
-                    >
+                    <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-400/40 flex items-center justify-center shrink-0 group-hover:bg-blue-500/30 group-hover:border-blue-400/70 transition-all">
                       <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:bg-blue-300" />
-                    </motion.div>
+                    </div>
                     <div>
                       <p className="text-white font-bold text-base group-hover:text-blue-100 transition-colors">{item.label}</p>
                       <p className="text-zinc-400 text-sm font-light">{item.desc}</p>
