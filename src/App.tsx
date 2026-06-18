@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, type ReactNode } from 'react';
 import { Instagram, MapPin, Trophy, Target, Flag, Copy, Check } from 'lucide-react';
 import {
   motion,
@@ -35,15 +35,24 @@ function ParallaxImg({ src, alt, className = '', hoverScale = 1.15, imgHeight = 
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+  const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768);
+
+  useEffect(() => {
+    const handler = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', handler, { passive: true });
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
   return (
     <div ref={ref} className="w-full h-full overflow-hidden">
       <motion.img
         src={src}
         alt={alt}
-        style={{ y }}
+        loading="lazy"
+        style={isDesktop ? { y } : undefined}
         variants={{ zoom: { scale: hoverScale } }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className={`w-full ${imgHeight} object-cover ${className}`}
+        className={`w-full ${isDesktop ? imgHeight : 'h-full'} object-cover ${className}`}
       />
     </div>
   );
@@ -81,7 +90,7 @@ function Blob({ className }: { className: string }) {
 }
 
 /* ─── section badge ─── */
-function Badge({ children }: { children: React.ReactNode }) {
+function Badge({ children }: { children: ReactNode }) {
   return (
     <motion.div
       variants={fadeUp}
