@@ -34,12 +34,12 @@ const ScrollExpandMedia = ({
   const [isMobileState, setIsMobileState] = useState<boolean>(() => window.innerWidth < 768);
 
   const scrollProgressRef = useRef(0);
-  const doneRef = useRef(false); // true once animation completes — never intercept again
+  const doneRef = useRef(false); // once true, never intercept scroll again
   const isMobileRef = useRef(window.innerWidth < 768);
   const rafRef = useRef<number | null>(null);
-  const listenersRef = useRef<(() => void) | null>(null);
+  const touchStartYRef = useRef(0);
 
-  // DOM refs — updated imperatively, no React re-renders during animation
+  // DOM refs — imperatively updated, zero React re-renders during scroll
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const bgRef = useRef<HTMLDivElement | null>(null);
   const mediaContainerRef = useRef<HTMLDivElement | null>(null);
@@ -68,88 +68,76 @@ const ScrollExpandMedia = ({
     if (scrollHintRef.current) scrollHintRef.current.style.transform = `translateX(${tx}vw)`;
   }, []);
 
-  // Animate progress from current → 1.0 over 700ms, then remove all listeners
-  const animateToCompletion = useCallback(() => {
-    if (doneRef.current) return;
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-
-    const startProgress = scrollProgressRef.current;
-    const startTime = performance.now();
-    const duration = 700;
-
-    const tick = (now: number) => {
-      const t = Math.min((now - startTime) / duration, 1);
-      // easeInOut quad
-      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      const progress = startProgress + (1 - startProgress) * eased;
-      scrollProgressRef.current = progress;
-      applyProgress(progress, isMobileRef.current);
-
-      if (t < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      } else {
-        // Animation done — release scroll forever
-        doneRef.current = true;
-        setShowContent(true);
-        if (listenersRef.current) {
-          listenersRef.current(); // remove all event listeners
-          listenersRef.current = null;
-        }
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-  }, [applyProgress]);
+  const onComplete = useCallback(() => {
+    doneRef.current = true;
+    setShowContent(true);
+  }, []);
 
   useEffect(() => {
+    scrollProgressRef.current = 0;
+    doneRef.current = false;
+    setShowContent(false);
     applyProgress(0, isMobileRef.current);
   }, [mediaType, applyProgress]);
 
   useEffect(() => {
-    const isHeroInView = () => {
+    // Only capture scroll when hero is at/near the top of viewport
+    const isHeroVisible = () => {
       if (!sectionRef.current) return false;
       const rect = sectionRef.current.getBoundingClientRect();
-      // Hero fills the screen (only the hero part, not the children content)
-      return rect.top <= 10 && rect.top >= -window.innerHeight * 0.3;
+      return rect.top <= 10 && rect.top >= -50;
+    };
+
+    const advance = (delta: number) => {
+      if (doneRef.current) return;
+      const newProgress = Math.min(Math.max(scrollProgressRef.current + delta, 0), 1);
+      scrollProgressRef.current = newProgress;
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        applyProgress(newProgress, isMobileRef.current);
+        if (newProgress >= 1) onComplete();
+      });
     };
 
     const handleWheel = (e: globalThis.WheelEvent) => {
       if (doneRef.current) return;
-      if (!isHeroInView()) return;
-      if (e.deltaY <= 0) return; // only trigger on scroll down
+      if (!isHeroVisible()) return;
       e.preventDefault();
-      animateToCompletion();
+      advance(e.deltaY * 0.002); // 2× faster than before
     };
 
-    let touchStartY = 0;
     const handleTouchStart = (e: globalThis.TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
+      touchStartYRef.current = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e: globalThis.TouchEvent) => {
       if (doneRef.current) return;
-      if (!isHeroInView()) return;
-      const deltaY = touchStartY - e.touches[0].clientY;
-      if (deltaY < 10) return; // only trigger on swipe up (scroll down)
+      if (!isHeroVisible()) return;
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartYRef.current - touchY;
+      touchStartYRef.current = touchY;
       e.preventDefault();
-      animateToCompletion();
+      advance(deltaY * 0.012); // ~2 swipes to complete
     };
 
-    const removeAll = () => {
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    const handleTouchEnd = () => {
+      touchStartYRef.current = 0;
     };
-
-    listenersRef.current = removeAll;
 
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-    return removeAll;
-  }, [animateToCompletion]);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [applyProgress, onComplete]);
 
   useEffect(() => {
     const checkIfMobile = () => {
