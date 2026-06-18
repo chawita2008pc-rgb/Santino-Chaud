@@ -166,6 +166,9 @@ export default function App() {
           textBlend={true}
         >
           <div className="max-w-4xl mx-auto py-12 md:py-24 text-center">
+            <p className="md:hidden text-xs text-zinc-500 tracking-widest uppercase mb-6">
+              Poné el video en horizontal
+            </p>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
