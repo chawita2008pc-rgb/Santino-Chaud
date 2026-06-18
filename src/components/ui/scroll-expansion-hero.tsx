@@ -101,10 +101,26 @@ const ScrollExpandMedia = ({
     };
 
     const handleWheel = (e: globalThis.WheelEvent) => {
-      if (doneRef.current) return;
+      if (isMobileRef.current) return;
       if (!isHeroVisible()) return;
+
+      const delta = e.deltaY * 0.002;
+      const currentProgress = scrollProgressRef.current;
+
+      if (delta > 0 && currentProgress >= 1) return;
+      if (delta < 0 && currentProgress <= 0) return;
+
       e.preventDefault();
-      advance(e.deltaY * 0.002); // 2× faster than before
+
+      const newProgress = Math.min(Math.max(currentProgress + delta, 0), 1);
+      scrollProgressRef.current = newProgress;
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        applyProgress(newProgress, false);
+        setShowContent(newProgress >= 1);
+        if (newProgress >= 1) doneRef.current = true;
+      });
     };
 
     const handleTouchStart = (e: globalThis.TouchEvent) => {
