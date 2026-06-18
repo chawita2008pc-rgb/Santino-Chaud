@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
-import { Mail, Instagram, MapPin, Trophy, Target, Flag } from 'lucide-react';
+import { Instagram, MapPin, Trophy, Target, Flag, Copy, Check } from 'lucide-react';
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useTransform,
   useInView,
@@ -125,6 +126,14 @@ function ImgCard({
 }
 
 export default function App() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText('santinochaud2008@gmail.com');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <>
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-blue-600 overflow-x-hidden">
@@ -595,7 +604,9 @@ export default function App() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="w-full border-t border-zinc-900 py-16 bg-[#050505]"
       >
-        <div className="container mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+        <div className="container mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-10 text-center md:text-left">
+
+          {/* Name + location */}
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 16 }}
@@ -616,25 +627,105 @@ export default function App() {
               <MapPin size={16} /> Buenos Aires, Argentina
             </motion.p>
           </div>
-          <div className="flex gap-6">
-            {[
-              { Icon: Instagram, href: '#' },
-              { Icon: Mail, href: '#' },
-            ].map(({ Icon, href }, i) => (
+
+          {/* Email + socials */}
+          <div className="flex flex-col items-center md:items-end gap-5">
+
+            {/* Email copy pill */}
+            <motion.button
+              onClick={handleCopy}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              whileHover={{ scale: 1.04, boxShadow: '0 0 28px rgba(59,130,246,0.18)' }}
+              whileTap={{ scale: 0.97 }}
+              animate={copied ? { scale: [1, 1.07, 1] } : {}}
+              className="group relative flex items-center gap-3 px-5 py-3 rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-blue-500/40 hover:bg-blue-500/8 transition-all duration-300 cursor-pointer overflow-hidden"
+            >
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent -skew-x-12 pointer-events-none"
+                initial={{ x: '-100%' }}
+                whileHover={{ x: '200%' }}
+                transition={{ duration: 0.7 }}
+              />
+              <span className="font-mono text-sm text-zinc-300 group-hover:text-white transition-colors tracking-wide select-none">
+                santinochaud2008@gmail.com
+              </span>
+              <AnimatePresence mode="wait">
+                {copied ? (
+                  <motion.span
+                    key="check"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                  >
+                    <Check size={15} className="text-green-400" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="copy"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                  >
+                    <Copy size={15} className="text-zinc-500 group-hover:text-blue-400 transition-colors" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+              <AnimatePresence>
+                {copied && (
+                  <motion.span
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: -36 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute left-1/2 -translate-x-1/2 text-xs font-mono text-green-400 pointer-events-none whitespace-nowrap"
+                  >
+                    ¡Copiado!
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
+
+            {/* Social icons */}
+            <div className="flex gap-4">
+              {/* Instagram */}
               <motion.a
-                key={i}
-                href={href}
+                href="https://www.instagram.com/santinochaud_/"
+                target="_blank"
+                rel="noopener noreferrer"
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 + 0.3, type: 'spring', stiffness: 300, damping: 18 }}
+                transition={{ delay: 0.45, type: 'spring', stiffness: 300, damping: 18 }}
                 whileHover={{ scale: 1.15, rotate: 8, backgroundColor: '#ffffff', color: '#000000' }}
                 whileTap={{ scale: 0.9 }}
                 className="w-12 h-12 rounded-full border border-zinc-800 flex items-center justify-center transition-colors"
               >
-                <Icon size={20} />
+                <Instagram size={20} />
               </motion.a>
-            ))}
+
+              {/* TikTok */}
+              <motion.a
+                href="https://www.tiktok.com/@santinochaud_"
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.55, type: 'spring', stiffness: 300, damping: 18 }}
+                whileHover={{ scale: 1.15, rotate: -8, backgroundColor: '#ffffff', color: '#000000' }}
+                whileTap={{ scale: 0.9 }}
+                className="w-12 h-12 rounded-full border border-zinc-800 flex items-center justify-center transition-colors"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.23 8.23 0 004.84 1.55V6.79a4.84 4.84 0 01-1.07-.1z" />
+                </svg>
+              </motion.a>
+            </div>
           </div>
         </div>
       </motion.footer>
